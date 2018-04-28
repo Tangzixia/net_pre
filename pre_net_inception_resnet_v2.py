@@ -1,4 +1,7 @@
 #-*-coding=utf-8-*-
+
+#注意这个可能会出现OOM问题，因为inception_resnet_v2网络太深，容易使显存爆掉！
+
 import os
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
@@ -8,6 +11,7 @@ import random
 
 height = 299
 width=299
+pre_size=(width,height)
 channel=3
 checkpoint_dir="H:/new_CNN_split/inception_resnet_v2.ckpt"
 img_train_path="H:/new_CNN_split/imgs_train"
@@ -35,8 +39,8 @@ if __name__=="__main__":
     correct_pred=tf.equal(tf.argmax(final_tensor,1),tf.argmax(y,1))
     eval_op=tf.reduce_mean(tf.cast(correct_pred,tf.float32))
 
-    loader = data_reader(img_train_path, label_train_path, batch_size)
-    loader_val = data_reader(img_val_path, label_val_path, batch_size)
+    loader = data_reader(img_train_path, label_train_path, pre_size[0], pre_size[1], batch_size)
+    loader_val = data_reader(img_val_path, label_val_path, pre_size[0], pre_size[1], batch_size)
     sess = tf.InteractiveSession()
     saver = tf.train.Saver()
     init_op = tf.global_variables_initializer()
