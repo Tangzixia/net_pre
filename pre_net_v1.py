@@ -6,6 +6,7 @@ from read_data import data_reader
 
 height = 224
 width=224
+pre_size=(width,height)
 channel=3
 checkpoint_dir="C:\\Users\\Administrator\\Desktop\\inception_v1.ckpt"
 img_path="H:\\new_CNN\\imgs"
@@ -44,8 +45,8 @@ if __name__=="__main__":
     init_fn = slim.assign_from_checkpoint_fn(checkpoint_dir, slim.get_model_variables("InceptionV1"),
                                              ignore_missing_vars=True)
     init_fn(sess)
-    loader=data_reader(img_path,class_path, batch_size)
-    loader_val=data_reader(img_path,class_path, batch_size=32)
+    loader=data_reader(img_path,class_path,pre_size[0],pre_size[1], batch_size)
+    loader_val=data_reader(img_path,class_path, pre_size[0],pre_size[1],batch_size=32)
 
     for epoch in range(10000):
         t_all_acc = 0
