@@ -8,11 +8,12 @@ import time
 import random
 
 class data_reader():
-    def __init__(self, img_path, class_path,pre_size, batch_size):
+    def __init__(self, img_path, class_path,pre_size,pre_size_w,pre_size_h, batch_size):
         self.img_path = img_path
         self.class_path = class_path
         self.batch_size = batch_size
-        self.pre_size=pre_size
+        self.pre_size_w=pre_size_w
+        self.pre_size_h=pre_size_h
         self.data_queue256_256 = queue.Queue(3 * batch_size)
         key_img_names = os.listdir(img_path)
         self.key_names = []
@@ -39,7 +40,7 @@ class data_reader():
         return dict_
 
     def read_single_data(self,key_name):
-        tmp_img=cv2.resize(cv2.imread(os.path.join(self.img_path,key_name+".png")),(self.pre_size,self.pre_size))
+        tmp_img=cv2.resize(cv2.imread(os.path.join(self.img_path,key_name+".png")),(self.pre_size_w,self.pre_size_h))
         tmp_label=self.labels[key_name]
         return tmp_img,tmp_label
 
