@@ -31,8 +31,9 @@ if __name__=="__main__":
         biases_fc_2 = tf.get_variable(name="biases_fc_2", shape=(2), initializer=tf.contrib.layers.xavier_initializer())
     logits = tf.nn.bias_add(tf.matmul(fc_rec, weights_fc_2), biases_fc_2)
     final_tensor=tf.nn.softmax(logits=logits)
-    cross_entropy_mean=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=logits))
-    train_step=tf.train.MomentumOptimizer(learning_rate=1e-4, momentum=0.9).minimize(cross_entropy_mean)
+    #前面写的有问题，这里我们的交叉熵损失不是一对数据的，而是一个batch中的所有的数据点，对多个数据点的预测表现比单一数据点的表现能更好地描述我们的模型的性能。
+    cross_entropy=tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=logits))
+    train_step=tf.train.MomentumOptimizer(learning_rate=1e-4, momentum=0.9).minimize(cross_entropy)
     correct_pred=tf.equal(tf.argmax(final_tensor, 1), tf.argmax(y, 1))
     eval_op=tf.reduce_mean(tf.cast(correct_pred,tf.float32))
 
